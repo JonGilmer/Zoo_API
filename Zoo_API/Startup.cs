@@ -7,12 +7,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mock_BestBuy_API
+namespace Zoo_API
 {
     public class Startup
     {
@@ -27,9 +29,28 @@ namespace Mock_BestBuy_API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<IDbConnection>(s =>
+            {
+                IDbConnection conn = new
+                MySqlConnection(Configuration.GetConnectionString("zoo"));
+                conn.Open();
+                return conn;
+            });
+
+            services.AddTransient<IZoo_AnimalsRepo, Zoo_AnimalsRepo>();
+
+            // CORS = Cross Open Resource Sharing
+            // Opens up the Api to not just limit the callers to a specific domain or individual URL
+            services.AddCors(options =>     
+            {                               
+            options.AddPolicy("AllowOrigin", builder =>
+            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            });
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mock Best Buy API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Zoo API", Version = "v1" });
             });
         }
 
@@ -46,6 +67,8 @@ namespace Mock_BestBuy_API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("AllowedOrigin");       // This is added in order to open up CORS
 
             app.UseAuthorization();
 

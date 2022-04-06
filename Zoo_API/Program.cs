@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mock_BestBuy_API
+namespace Zoo_API
 {
     public class Program
     {

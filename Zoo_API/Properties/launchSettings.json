@@ -12,15 +12,15 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/product",
+      "launchUrl": "api/Zoo_Animals",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Mock_BestBuy_API": {
+    "Zoo_API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/product",
+      "launchUrl": "api/Zoo_Animals",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

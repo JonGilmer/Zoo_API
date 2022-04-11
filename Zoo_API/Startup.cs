@@ -30,6 +30,7 @@ namespace Zoo_API
         {
             services.AddControllers();
 
+            // Adds database connection as scoped (only used once per request)
             services.AddScoped<IDbConnection>(s =>
             {
                 IDbConnection conn = new
@@ -38,10 +39,12 @@ namespace Zoo_API
                 return conn;
             });
 
+            // Adds interface repo and repo as transients (created for each request)
             services.AddTransient<IZoo_AnimalsRepo, Zoo_AnimalsRepo>();
 
             // CORS = Cross Open Resource Sharing
-            // Opens up the Api to not just limit the callers to a specific domain or individual URL
+            // Opens up the Api to not just limit the callers to a specific domain or individual URL, but any origin
+            // to make our API more accessible
             services.AddCors(options =>     
             {                               
             options.AddPolicy("AllowOrigin", builder =>
@@ -54,9 +57,12 @@ namespace Zoo_API
             });
         }
 
+        // -------------------------------------
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // allows the use of developer tools like swagger
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -64,14 +70,18 @@ namespace Zoo_API
                 app.UseSwaggerUI();
             }
 
+            // redirects http requests to https requests
             app.UseHttpsRedirection();
 
+            // This method is used to find the endpoint
             app.UseRouting();
 
-            app.UseCors("AllowedOrigin");       // This is added in order to open up CORS
+            // This is added in order to open up CORS
+            app.UseCors("AllowedOrigin");
 
             app.UseAuthorization();
 
+            // This method executes the endpoint with the mapped controller action
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -13,9 +13,11 @@ namespace Zoo_API
     {
         public static void Main(string[] args)
         {
+            // calls the CreateHostBuilder method to build the host
             CreateHostBuilder(args).Build().Run();
         }
 
+        // Uses CreateHostBuilder method to build a default host using the startup configuration settings
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
